@@ -1,0 +1,3 @@
+[submodule "kestra"]
+	path = kestra
+	url = https://github.com/kestra-io/kestra
