@@ -1,0 +1,52 @@
+configurations {
+    tests
+    implementation.extendsFrom(micronaut)
+}
+
+task copyGradleProperties(type: Copy) {
+    group = "build"
+    shouldRunAfter compileJava
+
+    from '../gradle.properties'
+    into 'src/main/resources'
+}
+
+processResources.dependsOn copyGradleProperties
+
+dependencies {
+    // Kestra
+    api project(':model')
+    annotationProcessor project(':processor')
+
+    // serializers
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-ion', version: jacksonVersion
+
+    // utils
+    implementation 'com.github.oshi:oshi-core:6.6.0'
+    implementation 'io.pebbletemplates:pebble:3.2.2'
+    implementation group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: '1.6.0'
+    implementation group: 'de.focus-shift', name: 'jollyday-core', version: '0.27.0'
+    implementation group: 'de.focus-shift', name: 'jollyday-jaxb', version: '0.27.0'
+    implementation 'nl.basjes.gitignore:gitignore-reader:1.5.1'
+    implementation group: 'dev.failsafe', name: 'failsafe', version: '3.3.2'
+
+    // scheduler
+    implementation group: 'com.cronutils', name: 'cron-utils', version: '9.2.1'
+
+    // schema
+    implementation group: 'com.github.victools', name: 'jsonschema-generator', version: '4.35.0'
+    implementation group: 'com.github.victools', name: 'jsonschema-module-jakarta-validation', version: '4.35.0'
+    implementation group: 'com.github.victools', name: 'jsonschema-module-jackson', version: '4.35.0'
+    implementation group: 'com.github.victools', name: 'jsonschema-module-swagger-2', version: '4.35.0'
+
+    // test
+    testAnnotationProcessor project(':processor')
+
+    testImplementation project(':repository-memory')
+    testImplementation project(':runner-memory')
+    testImplementation project(':storage-local')
+
+    testImplementation "io.micronaut:micronaut-http-client"
+    testImplementation "io.micronaut:micronaut-http-server-netty"
+    testImplementation "io.micronaut:micronaut-management"
+}
